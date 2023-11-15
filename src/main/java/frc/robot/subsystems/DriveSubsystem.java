@@ -12,6 +12,7 @@ public class DriveSubsystem extends SubsystemBase {
   public DriveSubsystem(DriveConfig configL, DriveConfig configR) {
     m_configL = configL;
     m_configR = configR;
+    forceTo(0, 0);
   }
 
   /**

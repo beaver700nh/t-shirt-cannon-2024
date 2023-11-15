@@ -6,14 +6,12 @@ import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.DriveConfig;
 import frc.robot.subsystems.PneumaticsSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class RobotContainer {
@@ -27,6 +25,8 @@ public class RobotContainer {
 
   private final PneumaticsSubsystem m_pneumaticsSubsystem = new PneumaticsSubsystem();
 
+  private final ArmSubsystem m_armSubsystem = new ArmSubsystem(new WPI_VictorSPX(69));
+
   private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
   private final DriveCommand m_driveCommand = new DriveCommand(
@@ -37,12 +37,6 @@ public class RobotContainer {
     m_driverController::getRightTriggerAxis
   );
 
-  private final Command m_launchCommand = new SequentialCommandGroup(
-    new InstantCommand(m_pneumaticsSubsystem::launch, m_pneumaticsSubsystem),
-    new WaitCommand(0.125),
-    new InstantCommand(m_pneumaticsSubsystem::stopLaunch, m_pneumaticsSubsystem)
-  );
-
   public RobotContainer() {
     m_driveSubsystem.setDefaultCommand(m_driveCommand);
 
@@ -50,7 +44,10 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    m_driverController.a().onTrue(m_launchCommand);
+    m_driverController.a().onTrue(m_pneumaticsSubsystem.launchCommand());
+
+    m_driverController.leftBumper().onTrue(m_armSubsystem.tiltUpCommand());
+    m_driverController.rightBumper().onTrue(m_armSubsystem.tiltDownCommand());
   }
 
   public Command getAutonomousCommand() {
