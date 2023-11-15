@@ -4,10 +4,12 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
   private final DriveConfig m_configL, m_configR;
+  private final DifferentialDrive m_drive;
 
   /**
    * @param configL The configuration of the left drive motor(s).
@@ -16,6 +18,11 @@ public class DriveSubsystem extends SubsystemBase {
   public DriveSubsystem(DriveConfig configL, DriveConfig configR) {
     m_configL = configL;
     m_configR = configR;
+
+    m_drive = new DifferentialDrive(
+      m_configL.getController(),
+      m_configR.getController()
+    );
   }
 
   /**
@@ -25,8 +32,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @param velocityR
    */
   public void forceTo(double velocityL, double velocityR) {
-    m_configL.controller.set(velocityL);
-    m_configR.controller.set(velocityR);
+    m_drive.tankDrive(velocityL, velocityR);
   }
 
   /**
@@ -36,7 +42,8 @@ public class DriveSubsystem extends SubsystemBase {
    * @param velocityR The requested velocity of the right drive motor(s).
    */
   public void accelTo(double velocityL, double velocityR) {
-    m_configL.accelTo(velocityL);
-    m_configR.accelTo(velocityR);
+    velocityL = m_configL.accelTo(velocityL, false);
+    velocityR = m_configR.accelTo(velocityR, false);
+    forceTo(velocityL, velocityR);
   }
 }

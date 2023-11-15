@@ -3,21 +3,23 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 
 public class DriveConfig {
-  public final MotorController controller;
-  public final boolean invert;
-  public final double maxAccel;
+  public final MotorController m_controller;
+  public final boolean m_invert;
+  public final double m_accelUp;
+  public final double m_accelDown;
 
   /**
    * @param controller The motor controller to use.
    * @param invert Whether the motor should spin in reverse.
    * @param maxAccel The maximum acceleration of the motor.
    */
-  public DriveConfig(MotorController controller, boolean invert, double maxAccel) {
-    this.controller = controller;
-    this.invert = invert;
-    this.maxAccel = maxAccel;
+  public DriveConfig(MotorController controller, boolean invert, double accelUp, double accelDown) {
+    m_controller = controller;
+    m_invert = invert;
+    m_accelUp = accelUp;
+    m_accelDown = accelDown;
 
-    controller.setInverted(invert);
+    m_controller.setInverted(m_invert);
   }
 
   /**
@@ -27,17 +29,45 @@ public class DriveConfig {
    * @param velocity The requested velocity of the motor.
    * @return The actual velocity of the motor.
    */
-  public double accelTo(double velocity) {
-    double now = controller.get();
+  public double accelTo(double velocity, boolean apply) {
+    double now = m_controller.get();
 
-    if (velocity > now) {
-      now = Math.min(velocity, now + maxAccel);
+    double accelDir = Math.signum(velocity - now);
+    double accelMag = (
+      Math.signum(now) == Math.signum(velocity) &&
+      Math.abs(velocity) < Math.abs(now) ?
+      m_accelDown : m_accelUp
+    );
+
+    now += accelDir * accelMag;
+
+    if (accelDir < 0) {
+      now = Math.max(now, velocity);
     }
-    else if (velocity < now) {
-      now = Math.max(velocity, now - maxAccel);
+    else {
+      now = Math.min(now, velocity);
     }
 
-    controller.set(now);
+    if (apply) {
+      m_controller.set(now);
+    }
+
     return now;
+  }
+
+  public final MotorController getController() {
+    return m_controller;
+  }
+
+  public final boolean getInvert() {
+    return m_invert;
+  }
+
+  public final double getAccelUp() {
+    return m_accelUp;
+  }
+
+  public final double getAccelDown() {
+    return m_accelDown;
   }
 }

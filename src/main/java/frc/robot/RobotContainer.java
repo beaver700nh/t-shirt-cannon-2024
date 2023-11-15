@@ -21,8 +21,8 @@ public class RobotContainer {
   private final MotorControllerGroup m_motorGroupR = new MotorControllerGroup(new WPI_VictorSPX(1), new WPI_VictorSPX(2));
 
   private final DriveSubsystem m_driveSubsystem = new DriveSubsystem(
-    new DriveConfig(m_motorGroupL, false, 0.04),
-    new DriveConfig(m_motorGroupR, true, 0.04)
+    new DriveConfig(m_motorGroupL, false, 0.04, 0.01),
+    new DriveConfig(m_motorGroupR, true, 0.04, 0.01)
   );
 
   private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
