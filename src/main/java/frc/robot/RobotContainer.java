@@ -44,7 +44,7 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    m_driverController.a().onTrue(m_pneumaticsSubsystem.launchCommand());
+    m_driverController.a().debounce(2).onTrue(m_pneumaticsSubsystem.launchCommand());
 
     m_driverController.leftBumper().onTrue(m_armSubsystem.tiltUpCommand());
     m_driverController.rightBumper().onTrue(m_armSubsystem.tiltDownCommand());
