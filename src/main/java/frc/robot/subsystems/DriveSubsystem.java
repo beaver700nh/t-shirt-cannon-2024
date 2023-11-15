@@ -4,31 +4,39 @@
 
 package frc.robot.subsystems;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
   private final DriveConfig m_configL, m_configR;
-  private DoubleSupplier m_inputL, m_inputR;
 
+  /**
+   * @param configL The configuration of the left drive motor(s).
+   * @param configR The configuration of the right drive motor(s).
+   */
   public DriveSubsystem(DriveConfig configL, DriveConfig configR) {
     m_configL = configL;
     m_configR = configR;
   }
 
-  public void attachController(DoubleSupplier inputL, DoubleSupplier inputR) {
-    m_inputL = inputL;
-    m_inputR = inputR;
+  /**
+   * Sets the drive train velocities immediately to the given values.
+   *
+   * @param velocityL
+   * @param velocityR
+   */
+  public void forceTo(double velocityL, double velocityR) {
+    m_configL.controller.set(velocityL);
+    m_configR.controller.set(velocityR);
   }
 
-  private void set(double powerL, double powerR) {
-    m_configL.rampTo(powerL);
-    m_configR.rampTo(powerR);
-  }
-
-  @Override
-  public void periodic() {
-    set(m_inputL.getAsDouble(), m_inputR.getAsDouble());
+  /**
+   * Requests the drive train to drive at the given velocities.
+   *
+   * @param velocityL The requested velocity of the left drive motor(s).
+   * @param velocityR The requested velocity of the right drive motor(s).
+   */
+  public void accelTo(double velocityL, double velocityR) {
+    m_configL.accelTo(velocityL);
+    m_configR.accelTo(velocityR);
   }
 }
