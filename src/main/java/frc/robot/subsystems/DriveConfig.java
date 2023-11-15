@@ -29,7 +29,7 @@ public class DriveConfig {
    * @param velocity The requested velocity of the motor.
    * @return The actual velocity of the motor.
    */
-  public double accelTo(double velocity, boolean apply) {
+  public double accelTo(double velocity) {
     double now = m_controller.get();
 
     double accelDir = Math.signum(velocity - now);
@@ -48,10 +48,7 @@ public class DriveConfig {
       now = Math.min(now, velocity);
     }
 
-    if (apply) {
-      m_controller.set(now);
-    }
-
+    m_controller.set(now);
     return now;
   }
 

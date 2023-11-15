@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
@@ -12,17 +8,26 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class DriveCommand extends CommandBase {
   private final DriveSubsystem m_drive;
-  private final DoubleSupplier m_inputL, m_inputR;
+  private final DoubleSupplier m_inputX, m_inputR, m_inputP, m_inputQ;
+  private final double MIN_X = 0.4, MIN_R = 0.2;
 
   /**
    * @param drive The drive subsystem to use.
-   * @param inputL A supplier of the left drive input.
-   * @param inputR A supplier of the right drive input.
+   * @param inputX A supplier of the drive velocity.
+   * @param inputR A supplier of the drive turn rate.
+   * @param inputP A supplier of the velocity multiplier.
+   * @param inputQ A supplier of the turn rate multiplier.
    */
-  public DriveCommand(DriveSubsystem drive, DoubleSupplier inputL, DoubleSupplier inputR) {
+  public DriveCommand(
+    DriveSubsystem drive,
+    DoubleSupplier inputX, DoubleSupplier inputR,
+    DoubleSupplier inputP, DoubleSupplier inputQ
+  ) {
     m_drive = drive;
-    m_inputL = inputL;
+    m_inputX = inputX;
     m_inputR = inputR;
+    m_inputP = inputP;
+    m_inputQ = inputQ;
 
     addRequirements(drive);
   }
@@ -34,7 +39,15 @@ public class DriveCommand extends CommandBase {
 
   @Override
   public void execute() {
-    m_drive.accelTo(m_inputL.getAsDouble(), m_inputR.getAsDouble());
+    m_drive.accelTo(dampedX(), dampedR());
+  }
+
+  private double dampedX() {
+    return m_inputX.getAsDouble() * ((1 - MIN_X) * m_inputP.getAsDouble() + MIN_X);
+  }
+
+  private double dampedR() {
+    return m_inputR.getAsDouble() * ((1 - MIN_R) * m_inputQ.getAsDouble() + MIN_R);
   }
 
   @Override
