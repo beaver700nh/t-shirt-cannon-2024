@@ -3,6 +3,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.ArmCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.DriveConfig;
 import frc.robot.subsystems.PneumaticsSubsystem;
@@ -25,7 +26,7 @@ public class RobotContainer {
 
   private final PneumaticsSubsystem m_pneumaticsSubsystem = new PneumaticsSubsystem();
 
-  private final ArmSubsystem m_armSubsystem = new ArmSubsystem(new WPI_VictorSPX(69));
+  private final ArmSubsystem m_armSubsystem = new ArmSubsystem(new WPI_VictorSPX(8));
 
   private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
@@ -33,21 +34,25 @@ public class RobotContainer {
     m_driveSubsystem,
     m_driverController::getLeftY,
     m_driverController::getRightX,
+    () -> 0, // m_driverController::getLeftTriggerAxis,
+    () -> 0  // m_driverController::getRightTriggerAxis
+  );
+
+  private final ArmCommand m_armCommand = new ArmCommand(
+    m_armSubsystem,
     m_driverController::getLeftTriggerAxis,
     m_driverController::getRightTriggerAxis
   );
 
   public RobotContainer() {
     m_driveSubsystem.setDefaultCommand(m_driveCommand);
+    m_armSubsystem.setDefaultCommand(m_armCommand);
 
     configureBindings();
   }
 
   private void configureBindings() {
     m_driverController.a().debounce(2).onTrue(m_pneumaticsSubsystem.launchCommand());
-
-    m_driverController.leftBumper().onTrue(m_armSubsystem.tiltUpCommand());
-    m_driverController.rightBumper().onTrue(m_armSubsystem.tiltDownCommand());
   }
 
   public Command getAutonomousCommand() {
