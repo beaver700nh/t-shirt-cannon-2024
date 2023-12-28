@@ -15,6 +15,10 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
+/*
+ * The main container class for the robot.
+ * Most high-level or important stuff goes here.
+ */
 public class RobotContainer {
   private final MotorControllerGroup m_motorGroupL = new MotorControllerGroup(new WPI_VictorSPX(3), new WPI_VictorSPX(4));
   private final MotorControllerGroup m_motorGroupR = new MotorControllerGroup(new WPI_VictorSPX(1), new WPI_VictorSPX(2));
@@ -34,8 +38,9 @@ public class RobotContainer {
     m_driveSubsystem,
     m_driverController::getLeftY,
     m_driverController::getRightX,
-    () -> 0, // m_driverController::getLeftTriggerAxis,
-    () -> 0  // m_driverController::getRightTriggerAxis
+    // [Note] Damping controls are disabled.
+    () -> 1, // m_driverController::getLeftTriggerAxis,
+    () -> 1  // m_driverController::getRightTriggerAxis
   );
 
   private final ArmCommand m_armCommand = new ArmCommand(

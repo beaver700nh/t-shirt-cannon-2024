@@ -5,11 +5,20 @@ import java.util.function.DoubleSupplier;
 import frc.robot.subsystems.ArmSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
+/*
+ * [Default Command]
+ * Tilts arm up if P is pressed, down if M is pressed.
+ */
 public class ArmCommand extends CommandBase {
   private final ArmSubsystem m_arm;
   private final DoubleSupplier m_inputM, m_inputP;
   private final double MULTIPLIER = 0.6;
 
+  /**
+   * @param arm The arm subsystem to use.
+   * @param inputM A supplier of the up input.
+   * @param inputP A supplier of the down input.
+   */
   public ArmCommand(ArmSubsystem arm, DoubleSupplier inputM, DoubleSupplier inputP) {
     m_arm = arm;
     m_inputM = inputM;

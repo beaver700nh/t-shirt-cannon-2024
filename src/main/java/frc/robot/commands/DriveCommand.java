@@ -6,6 +6,10 @@ import frc.robot.subsystems.DriveSubsystem;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
+/*
+ * [Default Command]
+ * Accelerates robot to velocity specified by suppliers bound in constructor.
+ */
 public class DriveCommand extends CommandBase {
   private final DriveSubsystem m_drive;
   private final DoubleSupplier m_inputX, m_inputR, m_inputP, m_inputQ;
@@ -42,10 +46,16 @@ public class DriveCommand extends CommandBase {
     m_drive.accelTo(dampedX(), dampedR());
   }
 
+  /**
+   * @return Requested X value, with damping P in [MIN_X..1].
+   */
   private double dampedX() {
     return m_inputX.getAsDouble() * ((1 - MIN_X) * m_inputP.getAsDouble() + MIN_X);
   }
 
+  /**
+   * @return Requested R value, with damping Q in [MIN_R..1].
+   */
   private double dampedR() {
     return m_inputR.getAsDouble() * ((1 - MIN_R) * m_inputQ.getAsDouble() + MIN_R);
   }

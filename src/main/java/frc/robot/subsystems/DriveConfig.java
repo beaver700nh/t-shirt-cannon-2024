@@ -2,6 +2,9 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 
+/*
+ * Utility structure for configuring a motor or group of motors.
+ */
 public class DriveConfig {
   public final MotorController m_controller;
   public final boolean m_invert;

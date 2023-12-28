@@ -7,6 +7,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
+/*
+ * Subsystem to control the pneumatics system.
+ */
 public class PneumaticsSubsystem extends SubsystemBase {
   private final Solenoid m_solenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
 
@@ -31,7 +34,7 @@ public class PneumaticsSubsystem extends SubsystemBase {
   }
 
   /**
-   * Generate a command that launches the ball for 1/8 second.
+   * Generate a command that launches the projectile for 1/8 second.
    *
    * @return The launch command.
    */
