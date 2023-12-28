@@ -39,8 +39,8 @@ public class RobotContainer {
     m_driverController::getLeftY,
     m_driverController::getRightX,
     // [Note] Damping controls are disabled.
-    () -> 1, // m_driverController::getLeftTriggerAxis,
-    () -> 1  // m_driverController::getRightTriggerAxis
+    () -> 1.0, // m_driverController::getLeftTriggerAxis,
+    () -> 1.0  // m_driverController::getRightTriggerAxis
   );
 
   private final ArmCommand m_armCommand = new ArmCommand(
