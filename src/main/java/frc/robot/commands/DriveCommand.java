@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
+import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.DriveSubsystem;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -13,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class DriveCommand extends CommandBase {
   private final DriveSubsystem m_drive;
   private final DoubleSupplier m_inputX, m_inputR, m_inputP, m_inputQ;
-  private final double MIN_X = 0.4, MIN_R = 0.2;
 
   /**
    * @param drive The drive subsystem to use.
@@ -47,17 +47,19 @@ public class DriveCommand extends CommandBase {
   }
 
   /**
-   * @return Requested X value, with damping P in [MIN_X..1].
+   * @return Requested X value, with multiplier P in [MIN_X..1].
    */
   private double dampedX() {
-    return m_inputX.getAsDouble() * ((1 - MIN_X) * m_inputP.getAsDouble() + MIN_X);
+    return m_inputX.getAsDouble() *
+      ((1 - DriveConstants.kMinSpeed) * m_inputP.getAsDouble() + DriveConstants.kMinSpeed);
   }
 
   /**
-   * @return Requested R value, with damping Q in [MIN_R..1].
+   * @return Requested R value, with multiplier Q in [MIN_R..1].
    */
   private double dampedR() {
-    return m_inputR.getAsDouble() * ((1 - MIN_R) * m_inputQ.getAsDouble() + MIN_R);
+    return m_inputR.getAsDouble() *
+      ((1 - DriveConstants.kMinTurn) * m_inputQ.getAsDouble() + DriveConstants.kMinTurn);
   }
 
   @Override
