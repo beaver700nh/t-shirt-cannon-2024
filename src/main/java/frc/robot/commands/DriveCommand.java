@@ -2,7 +2,7 @@ package frc.robot.commands;
 
 import java.util.function.Supplier;
 
-import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants;
 import frc.robot.subsystems.DriveSubsystem;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -51,7 +51,7 @@ public class DriveCommand extends CommandBase {
    */
   private double dampedX() {
     return m_inputX.get() *
-      ((1 - DriveConstants.kMinSpeed) * m_inputP.get() + DriveConstants.kMinSpeed);
+      ((1 - Constants.Drive.kMinSpeed) * m_inputP.get() + Constants.Drive.kMinSpeed);
   }
 
   /**
@@ -59,7 +59,7 @@ public class DriveCommand extends CommandBase {
    */
   private double dampedR() {
     return m_inputR.get() *
-      ((1 - DriveConstants.kMinTurn) * m_inputQ.get() + DriveConstants.kMinTurn);
+      ((1 - Constants.Drive.kMinTurn) * m_inputQ.get() + Constants.Drive.kMinTurn);
   }
 
   @Override

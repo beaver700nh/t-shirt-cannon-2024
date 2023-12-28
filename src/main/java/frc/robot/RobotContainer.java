@@ -1,5 +1,6 @@
 package frc.robot;
 
+import frc.robot.Constants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.DriveCommand;
@@ -20,19 +21,30 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
  * Most high-level or important stuff goes here.
  */
 public class RobotContainer {
-  private final MotorControllerGroup m_motorGroupL = new MotorControllerGroup(new WPI_VictorSPX(3), new WPI_VictorSPX(4));
-  private final MotorControllerGroup m_motorGroupR = new MotorControllerGroup(new WPI_VictorSPX(1), new WPI_VictorSPX(2));
+  private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
   private final DriveSubsystem m_driveSubsystem = new DriveSubsystem(
-    new DriveConfig(m_motorGroupL, false, 0.5, 0.3),
-    new DriveConfig(m_motorGroupR, true, 0.5, 0.3)
+    new DriveConfig(
+      new MotorControllerGroup(
+        new WPI_VictorSPX(Constants.Drive.CAN.kMotorL1),
+        new WPI_VictorSPX(Constants.Drive.CAN.kMotorL2)
+      ),
+      false, Constants.Drive.kRateSpinUp, Constants.Drive.kRateSpinDown
+    ),
+    new DriveConfig(
+      new MotorControllerGroup(
+        new WPI_VictorSPX(Constants.Drive.CAN.kMotorR1),
+        new WPI_VictorSPX(Constants.Drive.CAN.kMotorR2)
+      ),
+      true, Constants.Drive.kRateSpinUp, Constants.Drive.kRateSpinDown
+    )
   );
 
   private final PneumaticsSubsystem m_pneumaticsSubsystem = new PneumaticsSubsystem();
 
-  private final ArmSubsystem m_armSubsystem = new ArmSubsystem(new WPI_VictorSPX(8));
-
-  private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private final ArmSubsystem m_armSubsystem = new ArmSubsystem(
+    new WPI_VictorSPX(Constants.Arm.CAN.kMotorTilt)
+  );
 
   private final DriveCommand m_driveCommand = new DriveCommand(
     m_driveSubsystem,

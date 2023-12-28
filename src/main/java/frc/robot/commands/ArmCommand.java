@@ -2,7 +2,7 @@ package frc.robot.commands;
 
 import java.util.function.Supplier;
 
-import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -35,8 +35,8 @@ public class ArmCommand extends CommandBase {
   @Override
   public void execute() {
     m_arm.setTiltSpeed(
-      ArmConstants.kMultiplierTilt * m_inputP.get() - 
-      ArmConstants.kMultiplierTilt * m_inputM.get()
+      Constants.Arm.kMultiplierTilt * m_inputP.get() - 
+      Constants.Arm.kMultiplierTilt * m_inputM.get()
     );
   }
 

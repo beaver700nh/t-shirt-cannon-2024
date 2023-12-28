@@ -14,7 +14,8 @@ public class DriveConfig {
   /**
    * @param controller The motor controller to use.
    * @param invert Whether the motor should spin in reverse.
-   * @param maxAccel The maximum acceleration of the motor.
+   * @param accelUp The spinup speed of the motor.
+   * @param accelDown The spindown speed of the motor.
    */
   public DriveConfig(MotorController controller, boolean invert, double accelUp, double accelDown) {
     m_controller = controller;
